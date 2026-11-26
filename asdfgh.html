@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>4D Ultra Poyga — 200 Bosqich (Offline)</title>
+    <link rel="stylesheet" href="./asdfghjk.css">
+</head>
+<body>
+
+    <canvas id="gameCanvas"></canvas>
+
+    <!-- 1. ASOSIY MENYU (MAIN MENU) -->
+    <div id="mainMenuScreen" class="screen-overlay">
+        <div class="menu-box">
+            <div class="top-wallet">
+                <span>💰 Balans: <b id="menuCoinsDisplay">0</b> tanga</span>
+                <span>🏆 Ochiq bosqich: <b id="menuUnlockedDisplay">1 / 200</b></span>
+            </div>
+
+            <h1 class="game-logo">🏎️ 4D ULTRA POYGA</h1>
+            <p class="menu-subtitle">200 ta bosqich • 12 ta superkar • Cheksiz tezlik</p>
+
+            <div class="selected-preview">
+                <div class="preview-item">
+                    <span>Tanlangan bosqich:</span>
+                    <b id="menuSelectedLevelText">1-Bosqich (15 000 m)</b>
+                </div>
+                <div class="preview-item">
+                    <span>Tanlangan mashina:</span>
+                    <b id="menuSelectedCarText">Klassik Sedan</b>
+                </div>
+            </div>
+
+            <div class="menu-buttons">
+                <button id="menuPlayBtn" class="btn-primary">🏁 POYGANI BOSHLASH</button>
+                <div class="menu-row-btns">
+                    <button id="menuGarageBtn" class="btn-secondary">🚗 GARAJ (12 Mashina)</button>
+                    <button id="menuLevelsBtn" class="btn-secondary">🗺️ BOSQICHLAR (200)</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 2. GARAJ OYNASI -->
+    <div id="garageScreen" class="screen-overlay hidden">
+        <div class="panel-box">
+            <div class="panel-header">
+                <h2>🚗 GARAJ VA DO'KON</h2>
+                <div class="wallet-badge">💰 <span id="garageCoinsDisplay">0</span> tanga</div>
+                <button id="closeGarageBtn" class="btn-close">✖ Orqaga</button>
+            </div>
+            <p class="panel-desc">Yangi tezroq mashinalarni sotib oling yoki tanlang (har bir keyingi mashina tezroq):</p>
+            <div id="carGrid" class="car-grid"></div>
+        </div>
+    </div>
+
+    <!-- 3. 200 TA BOSQICH OYNASI -->
+    <div id="levelsScreen" class="screen-overlay hidden">
+        <div class="panel-box">
+            <div class="panel-header">
+                <h2>🗺️ BOSQICHLAR (1 — 200)</h2>
+                <div class="wallet-badge">Ochiq: <span id="levelsUnlockedBadge">1</span> / 200</div>
+                <button id="closeLevelsBtn" class="btn-close">✖ Orqaga</button>
+            </div>
+            <p class="panel-desc">Bosqichni tanlang (har bir bosqichda finish uzoqroq va mukofot kattaroq):</p>
+            <div id="levelsGrid" class="levels-grid"></div>
+        </div>
+    </div>
+
+    <!-- 4. O'YIN ICHIDAGI HUD PANELI -->
+    <div id="gameHud" class="hud-top hidden">
+        <div class="hud-left">
+            <div class="stat-box level-box">
+                <span class="label">BOSQICH</span>
+                <span id="hudLevelDisplay" class="value">1 / 200</span>
+            </div>
+            <div class="stat-box rank-box">
+                <span class="label">O'RIN</span>
+                <span id="hudRankDisplay" class="value">1 / 6</span>
+            </div>
+            <div class="stat-box">
+                <span class="label">TEZLIK</span>
+                <span id="hudSpeedDisplay" class="value">0 km/s</span>
+            </div>
+        </div>
+
+        <div class="progress-wrapper">
+            <div class="progress-labels">
+                <span>🏁 START</span>
+                <span id="hudDistanceText">0 / 15000 m</span>
+                <span>🏆 FINISH</span>
+            </div>
+            <div class="progress-track">
+                <div id="hudProgressBar" class="progress-fill"></div>
+            </div>
+        </div>
+
+        <button id="hudMenuBtn" class="hud-menu-btn">☰ Menyu</button>
+    </div>
+
+    <!-- Jonli Poygachilar Jadvali -->
+    <div id="leaderboard" class="leaderboard hidden"></div>
+
+    <!-- Start oldidan teskari sanoq -->
+    <div id="countdownOverlay" class="countdown hidden">3</div>
+
+    <!-- 5. FINISH (MARRA) OYNASI (Keyingi bosqich yonida Garaj bor!) -->
+    <div id="finishScreen" class="screen-overlay hidden">
+        <div class="panel-box finish-box">
+            <h2 id="finishTitle">🏆 MARRAGA YETIB KELDINGIZ!</h2>
+            <p id="finishSubtitle" class="panel-desc">Siz 1-o'rinni egalladingiz!</p>
+            <div class="reward-banner">
+                Yutuq mukofoti: <b>+<span id="finishRewardCoins">500</span> 💰 tanga</b>
+            </div>
+            <div id="finalResultsList" class="results-list"></div>
+            
+            <!-- Keyingi bosqich va Garaj yonma-yon -->
+            <div class="finish-actions">
+                <button id="nextLevelBtn" class="btn-primary">⏭ KEYINGI BOSQICH</button>
+                <button id="finishGarageBtn" class="btn-garage-highlight">🚗 GARAJ</button>
+                <button id="restartRaceBtn" class="btn-secondary">🔄 QAYTA</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Telefon/Planshet Sensor Tugmalari -->
+    <div id="touchControls" class="touch-controls hidden">
+        <div class="left-pad">
+            <button id="btnLeft" class="control-btn">◀</button>
+            <button id="btnRight" class="control-btn">▶</button>
+        </div>
+        <div class="right-pad">
+            <button id="btnDown" class="control-btn brake">▼</button>
+            <button id="btnUp" class="control-btn gas">▲</button>
+        </div>
+    </div>
+
+    <div id="keyboardHint" class="keyboard-hint hidden">
+        Boshqaruv: <b>W / ▲</b> - Gaz | <b>S / ▼</b> - Tormoz | <b>A / ◀</b> - Chapga | <b>D / ▶</b> - O'ngga
+    </div>
+
+    <script src="./qwertyu.js"></script>
+</body>
+</html>
