@@ -39,7 +39,7 @@ for (let i = 0; i < 200; i++) {
     LEVELS.push({
         index: i,
         number: i + 1,
-        distance: 50000 + (i * 500), // 1-bosqich 50,000,000 m, keyingi har bir bosqich +500,000 m!
+        distance: 500000 + (i * 5000), // 1-bosqich 50,000,000 m, keyingi har bir bosqich +500,000 m!
         botSpeedCap: 165 + (i * 1.4),
         reward: 1500 + (i * 150),
         curveSeed: (i + 1) * 1.37,
